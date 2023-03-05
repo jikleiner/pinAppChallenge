@@ -1,8 +1,8 @@
 package com.josekleiner.pinAppChallenge.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -33,28 +33,39 @@ public class ClienteServiceImp implements ClienteService {
 
 	@Override
 	public ClienteTORest getCliente(Long idCliente) {
-		// TODO Auto-generated method stub
 		return new ClienteTORest(clienteRepository.getReferenceById(idCliente));
 	}
 	
 	@Override
 	public KpiEdadesClientesTORest getKpiClientes() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Cliente> clientes = clienteRepository.findAll();
+		KpiEdadesClientesTORest kpiTORest = new KpiEdadesClientesTORest();
+		kpiTORest.setPromedioEdadesClientes(getPromedioEdadesClientes(clientes));
+		kpiTORest.setDesviacionEstandarEdadesClientes(getDesviacionEstandarEdadesClientes(clientes, kpiTORest.getPromedioEdadesClientes()));
+		return kpiTORest;
 	}
 
-	@Override
-	public Double getPromedioEdadesClientes() {
-		List<Cliente> clientes = clienteRepository.findAll();
-		Long contadorClientes = 0L;
-		Long acomuladorEdades = 0L;
+	private Double getPromedioEdadesClientes(List<Cliente> clientes) {
+		Double contadorClientes = 0D;
+		Double acomuladorEdades = 0D;
 		Double promedioEdades = 0.0D;
 		for (Cliente cliente : clientes) {
 			contadorClientes++;
 			acomuladorEdades = acomuladorEdades + cliente.getEdad();
 		}
-		promedioEdades = (double) (acomuladorEdades / contadorClientes);
+		promedioEdades = acomuladorEdades / contadorClientes;
 		return promedioEdades;
+	}
+	
+	private Double getDesviacionEstandarEdadesClientes(List<Cliente> clientes, Double promedioEdades) {
+		Double contadorClientes = 0D;
+		Double acumuladorCuadrados = 0D;
+		for (Cliente cliente : clientes) {
+			Double cuadradoEdadCliente = Math.pow( (double)cliente.getEdad() - promedioEdades, 2D);
+			acumuladorCuadrados =+ cuadradoEdadCliente;
+			contadorClientes++;
+		}
+		return acumuladorCuadrados/contadorClientes;
 	}
 
 	@Override
@@ -64,6 +75,7 @@ public class ClienteServiceImp implements ClienteService {
 		for (Cliente cliente : clientes) {
 			ClienteTORest clienteTORest = new ClienteTORest(cliente);
 			calcularFechaProbableDeMuerte(clienteTORest);
+			clientesTORest.add(clienteTORest);
 		}
 		return clientesTORest;
 	}
@@ -71,7 +83,7 @@ public class ClienteServiceImp implements ClienteService {
 	public void calcularFechaProbableDeMuerte(ClienteTORest clienteTORest) {
 		// obtenemos la representacion de año, mes y dia del promedio de edad de muerte en valor entero
 		// src: https://datosmacro.expansion.com/demografia/esperanza-vida/argentina
-		int añosPromedio = Integer.parseInt(edadPromedioDeMuerteArgentina.substring(0, edadPromedioDeMuerteArgentina.indexOf(".") -1));
+		int añosPromedio = Integer.parseInt(edadPromedioDeMuerteArgentina.substring(0, edadPromedioDeMuerteArgentina.indexOf(".")));
 		Double divisionMeses = Double.parseDouble(edadPromedioDeMuerteArgentina) - añosPromedio;
 		int mesesPromedio = (int) (divisionMeses * 12);
 		Double divisionDias = (divisionMeses * 12) - mesesPromedio;
@@ -79,17 +91,17 @@ public class ClienteServiceImp implements ClienteService {
 		
 		// obtenemos la zona horaria
 		ZoneId defaultZoneId = ZoneId.systemDefault();
-		
-		// realizamos la conversion de tipo
-		Instant fechaDeNacimientoConvert = clienteTORest.getFechaDeNacimiento().toInstant();
-		
+				
 		// se agregan la cantidad de años, meses y dias a la fecha de nacimiento
-		LocalDate fechaProbableDeMuerte = LocalDate.ofInstant(fechaDeNacimientoConvert, defaultZoneId)
+		LocalDate fechaProbableDeMuerte = Instant.ofEpochMilli(clienteTORest.getFechaDeNacimiento().getTime())
+				.atZone(defaultZoneId).toLocalDate()
 				.plusYears(añosPromedio)
 				.plusMonths(mesesPromedio)
 				.plusDays(diasPromedio);
 		
-		clienteTORest.setFechaProbableDeMuerte(Date.from(fechaProbableDeMuerte.atStartOfDay(defaultZoneId).toInstant()));
+		clienteTORest.setFechaProbableDeMuerte(Date.from(fechaProbableDeMuerte.atStartOfDay()
+			      .atZone(defaultZoneId)
+			      .toInstant()));
 	}
 
 }

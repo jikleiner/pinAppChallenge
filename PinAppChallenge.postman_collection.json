@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "77e94e27-570f-47bb-ba6f-4d028e7bad78",
+		"name": "PinAppChallenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15200544"
+	},
+	"item": [
+		{
+			"name": "crearCliente",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Jhon\",\r\n    \"apellido\": \"Doe\",\r\n    \"edad\": 45,\r\n    \"fechaDeNacimiento\": \"10-12-1978\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://pinappchallenge-env-2.eba-mfufc25m.sa-east-1.elasticbeanstalk.com/clientes/crearCliente",
+					"protocol": "http",
+					"host": [
+						"pinappchallenge-env-2",
+						"eba-mfufc25m",
+						"sa-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"clientes",
+						"crearCliente"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCliente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://pinappchallenge-env-2.eba-mfufc25m.sa-east-1.elasticbeanstalk.com/clientes/8",
+					"protocol": "http",
+					"host": [
+						"pinappchallenge-env-2",
+						"eba-mfufc25m",
+						"sa-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"clientes",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listarClientes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://pinappchallenge-env-2.eba-mfufc25m.sa-east-1.elasticbeanstalk.com/clientes/listarclientes",
+					"protocol": "http",
+					"host": [
+						"pinappchallenge-env-2",
+						"eba-mfufc25m",
+						"sa-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"clientes",
+						"listarclientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Kpi Clientes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://pinappchallenge-env-2.eba-mfufc25m.sa-east-1.elasticbeanstalk.com/clientes/kpideclientes",
+					"protocol": "http",
+					"host": [
+						"pinappchallenge-env-2",
+						"eba-mfufc25m",
+						"sa-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"clientes",
+						"kpideclientes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

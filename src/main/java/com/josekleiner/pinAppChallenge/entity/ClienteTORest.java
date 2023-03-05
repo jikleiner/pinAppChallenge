@@ -3,10 +3,11 @@ package com.josekleiner.pinAppChallenge.entity;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(value = {"fechaProbableDeMuerte"})
+@JsonInclude(Include.NON_NULL)
 public class ClienteTORest {
 
 	@JsonProperty(required = false)
@@ -18,10 +19,10 @@ public class ClienteTORest {
 	@JsonProperty(required = true)
 	private Long edad;
 	@JsonProperty(required = true)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date fechaDeNacimiento;
 	@JsonProperty(required = false)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date fechaProbableDeMuerte;
 	
 	public ClienteTORest(String nombre, String apellido, Long edad, Date fechaDeNacimiento, Date fechaProbableDeMuerte) {

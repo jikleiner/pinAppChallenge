@@ -10,7 +10,6 @@ public interface ClienteService {
 
 	public Cliente createCliente(ClienteTORest clienteTORest);
 	public KpiEdadesClientesTORest getKpiClientes();
-	public Double getPromedioEdadesClientes();
 	public List<ClienteTORest> listarClientes();
 	public ClienteTORest getCliente(Long idCliente);
 }
